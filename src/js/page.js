@@ -1,6 +1,9 @@
 // Copyright (c) 2010 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
+console.log("wtf ")
+
 var page = {
   startX: 150,
   startY: 150,
@@ -322,13 +325,18 @@ var page = {
   * Receive messages from background page, and then decide what to do next
   */
   addMessageListener: function() {
-    chrome.extension.onMessage.addListener(function(request, sender, response) {
+    console.log("can receive")
+    chrome.runtime.onMessage.addListener(function(request, sender, response) {
+      console.log(request)
       if (page.isSelectionAreaTurnOn) {
         page.removeSelectionArea();
       }
       switch (request.msg) {
         case 'capture_window': response(page.getWindowSize()); break;
-        case 'show_selection_area': page.showSelectionArea(); break;
+        case 'show_selection_area':
+          console.log("heheheh") 
+          page.showSelectionArea(); 
+          break;
         case 'scroll_init': // Capture whole page.
           response(page.scrollInit(0, 0, document.body.scrollWidth,
               document.body.scrollHeight, 'captureWhole'));
@@ -449,6 +457,7 @@ var page = {
   * Show the selection Area
   */
   showSelectionArea: function() {
+    console.log("show")
     page.createFloatLayer();
     setTimeout(page.createSelectionArea, 100);
   },
@@ -856,8 +865,14 @@ var page = {
   * Remove an element
   */
   init: function() { 
+    console.log("init page");
     if (document.body.hasAttribute('screen_capture_injected')) {
-      return;
+      // this.addMessageListener();
+
+      console.log("??")
+      // page.showSelectionArea();
+      // chrome.sendMessage("show_"
+      // return;
     }
     if (isPageCapturable()) {
       chrome.extension.sendMessage({msg: 'page_capturable'});
@@ -866,10 +881,13 @@ var page = {
     }
     this.injectCssResource('style.css');
     this.addMessageListener();
+    console.log("ready");
     this.injectJavaScriptResource("js/page_context.js");
 
     // Retrieve original width of view port and cache.
     page.getOriginalViewPortWidth();
+    // page.showSelectionArea();
+
   }
 };
 

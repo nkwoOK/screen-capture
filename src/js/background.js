@@ -24,6 +24,7 @@ var screenshot = {
     if (HotKey.isEnabled()) {
       switch (keyCode) {
         case HotKey.getCharCode('area'):
+          console.log("bg27")
           screenshot.showSelectionArea();
           break;
         case HotKey.getCharCode('viewport'):
@@ -43,31 +44,42 @@ var screenshot = {
   * Receive messages from content_script, and then decide what to do next
   */
   addMessageListener: function() {
+    console.log("addmess")
     chrome.extension.onMessage.addListener(function(request, sender, response) {
+      console.log(request)
       var obj = request;
-      var hotKeyEnabled = HotKey.isEnabled();
-      switch (obj.msg) {
-        case 'capture_hot_key':
-          screenshot.handleHotKey(obj.keyCode);
-          break;
-        case 'capture_selected':
-          screenshot.captureSelected();
-          break;
-        case 'capture_window':
-          if (hotKeyEnabled) {
-            screenshot.captureWindow();
-          }
-          break;
+
+      // var hotKeyEnabled = HotKey.isEnabled();
+      switch (request.message) {
+        // case 'capture_hot_key':
+        //   screenshot.handleHotKey(obj.keyCode);
+        //   break;
+        // case 'capture_selected':
+        //   screenshot.captureSelected();
+        //   break;
+        // case 'capture_window':
+        //   if (hotKeyEnabled) {
+        //     screenshot.captureWindow();
+        //   }
+        //   break;
         case 'capture_area':
-          if (hotKeyEnabled) {
-            screenshot.showSelectionArea();
-          }
-          break;
-        case 'capture_webpage':
-          if (hotKeyEnabled) {
-            screenshot.captureWebpage();
-          }
-          break;
+          // if (hotKeyEnabled) {
+            console.log("rr")
+            chrome.tabs.getSelected(null, (tab)=>{
+              console.log("tabbbbb")
+              // screenshot.init(tab)  
+              screenshot.showSelectionArea();
+              // chrome.tabs.sendMessage(tab.id, {msg: 'show_selection_area'})
+              // page.showSelectionArea() //?
+            })  
+          
+          // }
+        break;
+        // case 'capture_webpage':
+        //   if (hotKeyEnabled) {
+        //     screenshot.captureWebpage();
+        //   }
+        //   break;
       }
     });
   },
@@ -78,10 +90,13 @@ var screenshot = {
   sendMessage: function(message, callback) {
     chrome.tabs.getSelected(null, function(tab) {
       chrome.tabs.sendMessage(tab.id, message, callback);
+      console.log("send")
+
     });
   },
 
   showSelectionArea: function() {
+    console.log("SSS");
     screenshot.sendMessage({msg: 'show_selection_area'}, null);
   },
 
@@ -299,6 +314,7 @@ var screenshot = {
   },
 
   executeScriptsInExistingTabs: function() {
+    console.log("exescri")
     chrome.windows.getAll(null, function(wins) {
       for (var j = 0; j < wins.length; ++j) {
         chrome.tabs.getAllInWindow(wins[j].id, function(tabs) {
@@ -313,11 +329,16 @@ var screenshot = {
     });
   },
 
-  init: function() {
+  init: function(tab) {
     localStorage.screenshootQuality = localStorage.screenshootQuality || 'png';
-    screenshot.executeScriptsInExistingTabs();
-    screenshot.addMessageListener();
+    // screenshot.executeScriptsInExistingTabs();
+    chrome.tabs.executeScript(tab.id, { file: 'js/page.js' });
+    chrome.tabs.executeScript(tab.id, { file: 'js/shortcut.js' });
+
+    console.log("init");
   }
 };
 
-screenshot.init();
+screenshot.addMessageListener();
+
+// screenshot.init();

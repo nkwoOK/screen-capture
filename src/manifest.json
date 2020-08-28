@@ -1,7 +1,7 @@
 {
   "version": "5.2",
   "version_name": "5.2 beta",
-  "name": "__MSG_name__",
+  "name": "holyshit",
   "description": "__MSG_description__",
   "background": {
     "page": "background.html",
@@ -34,9 +34,10 @@
   },
   "manifest_version": 2,
   "options_page": "options.html",
-  "permissions": ["tabs", "<all_urls>"],
+  "permissions": ["tabs", "<all_urls>", "storage", "activeTab"],
   "web_accessible_resources": [
     "js/page_context.js",
     "style.css"
+    
   ]
 }

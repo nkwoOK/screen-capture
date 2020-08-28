@@ -71,10 +71,10 @@ var HotKeySetting = (function() {
       // i18n.
       $('area-capture-text').innerText =
         chrome.i18n.getMessage('capture_area');
-      $('viewport-capture-text').innerText =
-        chrome.i18n.getMessage('capture_window');
-      $('full-page-capture-text').innerText =
-        chrome.i18n.getMessage('capture_webpage');
+      // $('viewport-capture-text').innerText =
+      //   chrome.i18n.getMessage('capture_window');
+      // $('full-page-capture-text').innerText =
+      //   chrome.i18n.getMessage('capture_webpage');
       //$('screen-capture-text').innerText = chrome.i18n.getMessage('capture_screen');
 
       for (var i = 0; i < hotKeySelection.length; i++) {

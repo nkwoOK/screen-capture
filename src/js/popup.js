@@ -24,25 +24,28 @@ chrome.extension.onMessage.addListener(function(request, sender, response) {
 });
 
 function toDo(what) {
+  console.log("todo")
   var bg = chrome.extension.getBackgroundPage();
   switch (what) {
-    case 'capture_window':
-      bg.screenshot.captureWindow();
-      window.close();
-      break;
+    // case 'capture_window':
+    //   bg.screenshot.captureWindow();
+    //   window.close();
+    //   break;
     case 'capture_area':
-      bg.screenshot.showSelectionArea();
+      // bg.screenshot.showSelectionArea();
+      chrome.runtime.sendMessage({message: "capture_area"})
+      console.log("capcaddddddddddddddddp");   
       window.close();
       break;
-    case 'capture_webpage':
-      bg.screenshot.captureWebpage();
-      $('loadDiv').style.display = 'block';
-      $('item').style.display = 'none';
-      break;
-    case 'capture_special_page':
-      bg.screenshot.captureSpecialPage();
-      window.close();
-      break;
+    // case 'capture_webpage':
+    //   bg.screenshot.captureWebpage();
+    //   $('loadDiv').style.display = 'block';
+    //   $('item').style.display = 'none';
+    //   break;
+    // case 'capture_special_page':
+    //   bg.screenshot.captureSpecialPage();
+    //   window.close();
+    //   break;
   }
 }
 
